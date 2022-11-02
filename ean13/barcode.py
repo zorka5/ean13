@@ -1,7 +1,7 @@
 import itertools
 from typing import List
 
-from encoding import G_code, L_code, R_code, encoding_dict
+from .encoding import G_code, L_code, R_code, encoding_dict
 
 
 class Barcode:
