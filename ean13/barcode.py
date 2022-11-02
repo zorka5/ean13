@@ -62,9 +62,3 @@ class Barcode:
     @property
     def areas(self) -> List[int]:
         return list(itertools.chain.from_iterable(self._markers))
-
-
-b = Barcode("8711253001202")
-print(b.areas)
-for marker in b.markers:
-    print(marker)
