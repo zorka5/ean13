@@ -10,16 +10,17 @@ class BarcodeGenerator:
     sequence: List[int]
 
     def __init__(self, sequence: str) -> None:
-        self.sequence = Barcode(sequence).areas
-        self._generate_barcode()
+        self.barcode = Barcode(sequence)
+        self.sequence = self.barcode.areas
+        self._generate_barcode(self)
+        print(self.barcode.code)
 
+    @staticmethod
     def _generate_barcode(self) -> None:
-        print(len(self.sequence))
         with Image.open("ean13/base.png").convert("RGBA") as base:
             (width, height) = base.size
 
             max_width = int(width / (95 + 7 + 11))
-            print("max_width", max_width)
 
             draw = ImageDraw.Draw(base)
 
