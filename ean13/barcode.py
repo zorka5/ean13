@@ -16,10 +16,16 @@ class Barcode:
     end_marker: List[int]
 
     _markers: List[List[int]] = []
+    _checksum: int
+    _code: str
 
-    # TODO: checksum
 
     def __init__(self, code: str) -> None:
+        assert len(code) == 12
+        checksum = str(self._generate_checksum(code))
+        self._checksum = checksum
+        self._code = code + checksum
+
         # 3 areas for the start marker (101)
         self.start_marker = [1, 0, 1]
         self._markers.append(self.start_marker)
@@ -28,7 +34,7 @@ class Barcode:
 
         # 42 areas (seven per digit) to encode digits 2–7
         for i in range(1, 7):
-            current_digit = code[i]
+            current_digit = self.code[i]
             current_code = enc["first_group"][i - 1]
             if current_code == "L":
                 self.first_digit_markers[i - 1] = [
@@ -46,7 +52,7 @@ class Barcode:
 
         # 42 areas (seven per digit) to encode digits 8–13
         for i in range(7, 13):
-            current_digit = code[i]
+            current_digit = self.code[i]
             current_code = enc["last_group"][i - 7]
             self.last_digit_markers[i - 7] = [int(i) for i in [*R_code[current_digit]]]
             self._markers.append(self.last_digit_markers[i - 7])
@@ -56,9 +62,25 @@ class Barcode:
         self._markers.append(self.end_marker)
 
     @property
+    def code(self) -> str:
+        return self._code
+    
+    @property
     def markers(self) -> List[List[int]]:
         return self._markers
 
     @property
     def areas(self) -> List[int]:
         return list(itertools.chain.from_iterable(self._markers))
+
+    @property
+    def checksum(self) -> int:
+        return self._checksum
+    
+    def _generate_checksum(self, code: str) -> int:
+        odd = [int(i) for i in code[-1::-2]]
+        sum_odd = sum(odd)
+        even = [int(i) for i in code[-2::-2]]
+        sum_even = sum(even)
+        #( 10 - [ (3 * Odd + Even) modulo 10 ] ) modulo 10
+        return ( 10 -  (3 *sum_odd + sum_even) % 10  ) % 10
