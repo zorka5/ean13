@@ -20,7 +20,8 @@ class Barcode:
     _code: str
 
     def __init__(self, code: str) -> None:
-        assert ((len(code) == 12), "Sequence len is not 12")
+        if len(code) != 12:
+            raise AttributeError("Len is not 12")
         checksum = str(self._generate_checksum(code))
         self._checksum = checksum
         self._code = code + checksum
