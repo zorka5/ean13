@@ -1,4 +1,5 @@
 import itertools
+import sys
 from typing import List
 
 from .encoding import G_code, L_code, R_code, encoding_dict
@@ -21,7 +22,9 @@ class Barcode:
 
     def __init__(self, code: str) -> None:
         if len(code) != 12:
-            raise AttributeError("Len is not 12")
+            print("Len is not 12")
+            sys.exit(1)
+
         checksum = str(self._generate_checksum(code))
         self._checksum = checksum
         self._code = code + checksum
