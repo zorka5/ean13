@@ -19,9 +19,8 @@ class Barcode:
     _checksum: int
     _code: str
 
-
     def __init__(self, code: str) -> None:
-        assert len(code) == 12
+        assert ((len(code) == 12), "Sequence len is not 12")
         checksum = str(self._generate_checksum(code))
         self._checksum = checksum
         self._code = code + checksum
@@ -64,7 +63,7 @@ class Barcode:
     @property
     def code(self) -> str:
         return self._code
-    
+
     @property
     def markers(self) -> List[List[int]]:
         return self._markers
@@ -76,11 +75,11 @@ class Barcode:
     @property
     def checksum(self) -> int:
         return self._checksum
-    
+
     def _generate_checksum(self, code: str) -> int:
         odd = [int(i) for i in code[-1::-2]]
         sum_odd = sum(odd)
         even = [int(i) for i in code[-2::-2]]
         sum_even = sum(even)
-        #( 10 - [ (3 * Odd + Even) modulo 10 ] ) modulo 10
-        return ( 10 -  (3 *sum_odd + sum_even) % 10  ) % 10
+        # ( 10 - [ (3 * Odd + Even) modulo 10 ] ) modulo 10
+        return (10 - (3 * sum_odd + sum_even) % 10) % 10
