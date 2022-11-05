@@ -1,4 +1,3 @@
-import argparse
 from typing import List
 
 from PIL import Image, ImageDraw, ImageFont
@@ -8,7 +7,6 @@ from .barcode import Barcode
 
 class BarcodeGenerator:
     sequence: List[int]
-    barcode_str: str
 
     def __init__(self, sequence: str) -> None:
         self.barcode = Barcode(sequence)
